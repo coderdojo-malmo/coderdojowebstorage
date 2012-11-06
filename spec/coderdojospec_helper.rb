@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'sinatra/base'
 require 'rubygems' if RUBY_VERSION < "1.9"
 require 'sinatra/base'

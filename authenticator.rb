@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'warden'
 
 Warden::Manager.serialize_into_session{|user| user.id}

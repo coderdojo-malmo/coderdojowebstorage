@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'dm-rails/mass_assignment_security'
 require 'bcrypt'
 require 'securerandom'

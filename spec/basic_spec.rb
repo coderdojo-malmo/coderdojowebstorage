@@ -1,3 +1,4 @@
+# encoding: utf-8
 require File.dirname(__FILE__) + '/coderdojospec_helper'
 
 describe 'The CoderDojo Web Storage App' do
