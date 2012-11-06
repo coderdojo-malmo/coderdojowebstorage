@@ -9,7 +9,7 @@ require File.dirname(__FILE__)+'/lib/user'
 DataMapper.auto_upgrade!
 
 # need to require this after require of lib/user
-require File.dirname(__FILE__) + '/authenticator'
+require File.dirname(__FILE__) + '/lib/authenticator'
 
 class CoderDojoWebStorage < Sinatra::Base
   configure do
@@ -40,7 +40,7 @@ class CoderDojoWebStorage < Sinatra::Base
   post "/signup" do
     @user = User.new params[:user]
     if @user.save
-      redirect :to => "/users/#{@user.username}"
+      redirect "/users/#{@user.username}"
     else
       erb :signup
     end
