@@ -1,3 +1,6 @@
+require 'rubygems' if RUBY_VERSION < "1.9"
+require 'sinatra/base'
+require 'data_mapper'
 
 DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite://#{File.dirname(__FILE__)}/db.sqlite3")
 require File.dirname(__FILE__)+'/lib/user'

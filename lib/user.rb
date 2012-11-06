@@ -13,7 +13,7 @@ class User
 
   validates_uniqueness_of :username
   validates_format_of :username, :as => /^[a-zA-Z0-9]+$/
-  validates_length_of :encrypted_password, :min => 74, :max => 74
+  validates_length_of :encrypted_password, :min => 64, :max => 74
 
 
   attr_accessible :username
@@ -29,34 +29,40 @@ class User
   end
 
   def encrypt_password!
-    self.encrypted_password = User.get_hash(self.password)
+    hash_string = User.hash_string(password)
+    salt = User.salt_from_hash(hash_string)
+    pass = BCrypt::Password.create(hash_string)
+    self.encrypted_password = "#{salt}#{pass}"
   end
 
   def self.authenticate_by_password(username, password)
     user = User.first :username => username
-    salt = user.encrypted_password[0..9]
-    if user.encrypted_password.eql?(User.get_hash(password, salt))
+    salt = User.salt_from_hash(user.encrypted_password)
+    hash_string = User.hash_string(password, salt)
+    pass_string = user.encrypted_password[10..user.encrypted_password.size]
+    pass = BCrypt::Password.new pass_string
+    if pass == hash_string
       user
     else
       nil
     end
+
   end
 
-  # before save because before_save is not called before validations.
-  def save
-    if password.nil? || password.empty?
-    else
-      encrypt_password!
-    end
-    super
-  end
-
-  def self.get_hash(plain, salt = nil)
+  def self.hash_string(plain, salt = nil)
     salt ||= SecureRandom.hex(5)
-    #hash_plain = "#{salt}#{CoderDojoWebStorage::PWSALT}#{plain}"
-    #h = Digest::SHA256.hexdigest(hash_plain)
-    h = Digest::SHA256.hexdigest("#{salt}#{CoderDojoWebStorage::PWSALT}#{plain}")
-    "#{salt}#{h}"
+    "#{salt}#{CoderDojoWebStorage::PWSALT}#{plain}"
+  end
+
+  def self.new_hash(plain, salt = nil)
+    h = User.hash_string(plain, salt)
+    salt = User.salt_from_hash(h)
+    pass = BCrypt::Password.create(h)
+    "#{salt}#{pass}"
+  end
+
+  def self.salt_from_hash(h)
+    h[0..9]
   end
 
 end
