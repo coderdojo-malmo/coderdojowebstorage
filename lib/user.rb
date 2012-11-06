@@ -13,7 +13,7 @@ class User
 
   validates_uniqueness_of :username
   validates_format_of :username, :as => /^[a-zA-Z0-9]+$/
-  validates_length_of :encrypted_password, :min => 64, :max => 74
+  validates_length_of :encrypted_password, :min => 64, :max => 74, :message => 'Du måste ange lösenord'
 
 
   attr_accessible :username, :password
