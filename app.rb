@@ -1,24 +1,24 @@
-require 'rubygems' if RUBY_VERSION < "1.9"
-require 'sinatra/base'
-require 'data_mapper'
-require './authenticator'
 
 DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite://#{File.dirname(__FILE__)}/db.sqlite3")
 require File.dirname(__FILE__)+'/lib/user'
 #require File.dirname(__FILE__)+'/lib/static_files'
 DataMapper.auto_upgrade!
 
+# need to require this after require of lib/user
+require './authenticator'
+
 class CoderDojoWebStorage < Sinatra::Base
+  configure do
+    Sinatra::Application.reset!
+    use Rack::Reloader
+  end
+
   set    :session_secret, "abc123"
   PWSALT = "abc123"
 
   register Sinatra::Authenticator
 
 
-  configure do
-    Sinatra::Application.reset!
-    use Rack::Reloader
-  end
 
   helpers do
     Sinatra::Authenticator::Helpers

@@ -120,13 +120,17 @@ GEM
     thor (0.16.0)
     tilt (1.3.3)
     uuidtools (2.1.3)
+    warden (1.2.1)
+      rack (>= 1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  bcrypt-ruby
   data_mapper
   dm-postgres-adapter
   dm-rails
   dm-sqlite-adapter
   sinatra
+  warden

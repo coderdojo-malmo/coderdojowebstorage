@@ -25,7 +25,7 @@ module Sinatra
       end
     end
 
-    def registered app
+    def self.registered app
       app.enable :sessions
 
       app.helpers Authenticator::Helpers
@@ -34,6 +34,9 @@ module Sinatra
       # endpoints for authentication
       #
 
+      app.get "/foo/?" do
+        "hej hopp"
+      end
       app.get "/signin" do
         erb :signin
       end
@@ -50,7 +53,7 @@ module Sinatra
       end
 
       ['post','get','delete','put'].each do |m|
-        send m, '/unauthenticated/?' do
+        app.send("#{m}", '/unauthenticated/?') do
           status 401
           erb :signin
         end

@@ -1,5 +1,5 @@
 require 'dm-rails/mass_assignment_security'
-require 'digest'
+require 'bcrypt'
 require 'securerandom'
 class User
   include DataMapper::Resource
@@ -42,6 +42,14 @@ class User
     end
   end
 
+  # before save because before_save is not called before validations.
+  def save
+    if password.nil? || password.empty?
+    else
+      encrypt_password!
+    end
+    super
+  end
 
   def self.get_hash(plain, salt = nil)
     salt ||= SecureRandom.hex(5)
