@@ -1,10 +1,4 @@
-require 'sinatra/base'
-require 'rubygems' if RUBY_VERSION < "1.9"
-require 'sinatra/base'
-require 'data_mapper'
-require File.dirname(File.dirname(__FILE__)) + '/app'
-require 'rspec'
-require 'rack/test'
+require File.dirname(__FILE__) + '/coderdojospec_helper'
 
 describe 'The CoderDojo Web Storage App' do
   include Rack::Test::Methods
@@ -16,6 +10,6 @@ describe 'The CoderDojo Web Storage App' do
   it "says hello" do
     get '/'
     last_response.should be_ok
-    last_response.body.should == 'Hello World'
+    last_response.body.should match(/CoderDojo/)
   end
 end
