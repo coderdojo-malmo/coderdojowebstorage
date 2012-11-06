@@ -94,4 +94,8 @@ class CoderDojoWebStorage < Sinatra::Base
     erb :show_user
   end
 
+  get "/jonashemligatillhall" do
+    erb :editor
+  end
+
 end
