@@ -17,9 +17,11 @@ end
 module Sinatra
   module Authenticator
     module Helpers
+
       def warden
         request.env['warden']
       end
+
       def is_authenticated?
         warden.authenticated?
       end
