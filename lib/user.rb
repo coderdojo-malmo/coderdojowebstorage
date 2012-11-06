@@ -16,16 +16,19 @@ class User
   validates_length_of :encrypted_password, :min => 64, :max => 74
 
 
-  attr_accessible :username
+  attr_accessible :username, :password
   attr_accessor   :password
+
   attr_reader     :encrypted_password,
                   :auth_level,
                   :created_at,
                   :updated_at
 
-  def password=(pass)
-    @password ||= pass
-    encrypt_password!
+  before :valid? do
+    if self.password.nil? || self.password.empty?
+    else
+      encrypt_password!
+    end
   end
 
   def encrypt_password!
