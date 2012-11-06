@@ -34,6 +34,7 @@ class User
   end
 
   def self.authenticate_by_password(username, password)
+    puts "will try to authenticate #{username} with pass #{password}"
     user = User.first :username => username
     return nil unless user
     salt = User.salt_from_hash(user.encrypted_password)

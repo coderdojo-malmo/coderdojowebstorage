@@ -1,16 +1,18 @@
 # encoding: utf-8
 require 'warden'
 
-Warden::Manager.serialize_into_session{|user| user.id}
-Warden::Manager.serialize_from_session{|id| User.get(id)}
-
 Warden::Strategies.add :password do
+  def valid?
+    (params[:username] && params[:password])
+  end
+
   def authenticate!
-    user = User.authenticate_by_password(params[:username], params[:password])
-    if user
-      return success(user)
-    end
-    fail!("authentication fail")
+    puts "am I even executed?! with params #{params.inspect}"
+    user = User.authenticate_by_password(
+      params[:username],
+      params[:password]
+    )
+    return user ? success(user) : fail!("Misslyckades att logga in")
   end
 end
 
@@ -40,6 +42,13 @@ module Sinatra
 
       app.helpers Authenticator::Helpers
 
+      app.use Warden::Manager do |manager|
+        manager.default_strategies :password
+        manager.failure_app = app
+        manager.serialize_into_session { |user| user.id }
+        manager.serialize_from_session { |id| User.get(id) }
+      end
+
       #
       # endpoints for authentication
       #
@@ -52,18 +61,20 @@ module Sinatra
       end
 
       app.post "/signin" do
+        puts "will try to authenticate with params: #{params.inspect}"
         warden.authenticate!
-        redirect :to => "/"
+        redirect "/"
       end
 
       app.post "/signout" do
         session[:user_id] = nil
         warden.logout
-        redirect :to => "/"
+        redirect "/"
       end
 
       ['post','get','delete','put'].each do |m|
         app.send("#{m}", '/unauthenticated/?') do
+          puts "in unauthenticated with #{params.inspect}"
           status 401
           erb :signin
         end
