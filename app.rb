@@ -8,7 +8,7 @@ require File.dirname(__FILE__)+'/lib/user'
 DataMapper.auto_upgrade!
 
 # need to require this after require of lib/user
-require './authenticator'
+require File.dirname(__FILE__) + '/authenticator'
 
 class CoderDojoWebStorage < Sinatra::Base
   configure do
