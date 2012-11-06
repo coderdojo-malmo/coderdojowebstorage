@@ -1,1 +1,8 @@
 i am signup
+<form method="post" action="/signup">
+  <%= @user.errors.collect{|e| "#{e}"}.join("<br/>") %>
+
+  <input type="text" name="user[username]" value="<%= @user.username %>" placeholder="Användarnamn"/>
+  <input type="text" name="user[password]" value="" placeholder="Lösenord"/>
+  <input type="submit" class="btn"/>
+</form>
