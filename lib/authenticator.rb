@@ -27,6 +27,10 @@ module Sinatra
       def current_user
         warden.user
       end
+
+      def ensure_authenticated!
+        halt(403) unless is_authenticated?
+      end
     end
 
     def self.registered app

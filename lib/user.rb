@@ -25,6 +25,29 @@ class User
                   :created_at,
                   :updated_at
 
+  def file_dir
+    File.dirname(__FILE__)+'/../public/u/'+self.username
+  end
+
+  def file_path(file_name)
+    "/public/u/#{self.username}/#{file_name}"
+  end
+
+  def self.authenticate_by_password(username, password)
+    user = User.first :username => username
+    salt = User.salt_from_hash(user.encrypted_password)
+    hash_string = User.hash_string(password, salt)
+    pass_string = user.encrypted_password[10..user.encrypted_password.size]
+    pass = BCrypt::Password.new pass_string
+    if pass == hash_string
+      user
+    else
+      nil
+    end
+  end
+
+  private
+
   before :valid? do
     if self.password.nil? || self.password.empty?
     else
@@ -39,19 +62,7 @@ class User
     self.encrypted_password = "#{salt}#{pass}"
   end
 
-  def self.authenticate_by_password(username, password)
-    user = User.first :username => username
-    salt = User.salt_from_hash(user.encrypted_password)
-    hash_string = User.hash_string(password, salt)
-    pass_string = user.encrypted_password[10..user.encrypted_password.size]
-    pass = BCrypt::Password.new pass_string
-    if pass == hash_string
-      user
-    else
-      nil
-    end
 
-  end
 
   def self.hash_string(plain, salt = nil)
     salt ||= SecureRandom.hex(5)

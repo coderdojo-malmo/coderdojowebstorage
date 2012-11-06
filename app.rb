@@ -46,6 +46,33 @@ class CoderDojoWebStorage < Sinatra::Base
     end
   end
 
+  get "/upload" do
+    ensure_authenticated!
+  end
+  
+  post "/upload" do
+    # @todo move this logic into lib/ something
+    ensure_authenticated!
+    unless params[:file] && (tmpfile = params[:file][:tempfile]) && (name = params[:file][:filename])
+      return erb :upload
+    end
+    target_dir = current_user.file_dir
+    while blk = tmpfile.read(65536)
+      unless File.directory? target_dir
+        Dir.mkdir target_dir
+      end
+      begin
+        File.open(File.join(target_dir, name), "wb") do |f|
+          f.write(tmpfile.read)
+        end
+      rescue Exception, e
+        puts "exception writing file: #{e}"
+      end
+    end
+    redirect current_user.file_path(name)
+  end
+
+
   get "/users" do
     ensure_authenticated!
   end
