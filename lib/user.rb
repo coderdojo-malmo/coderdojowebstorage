@@ -35,6 +35,7 @@ class User
 
   def self.authenticate_by_password(username, password)
     user = User.first :username => username
+    return nil unless user
     salt = User.salt_from_hash(user.encrypted_password)
     hash_string = User.hash_string(password, salt)
     pass_string = user.encrypted_password[10..user.encrypted_password.size]

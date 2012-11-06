@@ -20,6 +20,7 @@ class CoderDojoWebStorage < Sinatra::Base
   set    :session_secret, "abc123"
   PWSALT = "abc123"
 
+  # depends on warden
   register Sinatra::Authenticator
 
 
