@@ -16,12 +16,15 @@ end
 module Sinatra
   module Authenticator
     module Helpers
+      def warden
+        request.env['warden']
+      end
       def is_authenticated?
-        env['warden'].authenticated?
+        warden.authenticated?
       end
 
       def current_user
-        env['warden'].user
+        warden.user
       end
     end
 
@@ -42,13 +45,13 @@ module Sinatra
       end
 
       app.post "/signin" do
-        env['warden'].authenticate!
+        warden.authenticate!
         redirect :to => "/"
       end
 
       app.post "/signout" do
         session[:user_id] = nil
-        env['warden'].logout
+        warden.logout
         redirect :to => "/"
       end
 
