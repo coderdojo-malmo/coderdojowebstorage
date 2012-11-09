@@ -107,4 +107,29 @@ class CoderDojoWebStorage < Sinatra::Base
     redirect current_user.file_path(name)
   end
 
+
+  get "/users" do
+    ensure_authenticated!
+  end
+
+  get "/users/:username/update" do
+    @user = User.first :username => params[:username]
+  end
+
+  post "/users/:username/update" do
+    @user = User.first :username => params[:username]
+    unless @user.id.eql? session[:user_id]
+      ensure_admin!
+    end
+  end
+
+  get "/users/:username" do
+    @user = User.first :username =>  params[:username]
+    erb :show_user
+  end
+
+  get "/jonashemligatillhall" do
+    erb :editor
+  end
+
 end
