@@ -1,38 +1,43 @@
 # encoding: utf-8
 require 'rubygems' if RUBY_VERSION < "1.9"
 require 'sinatra/base'
+require 'rack-flash'
 require 'data_mapper'
-
-DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite://#{File.dirname(__FILE__)}/db.sqlite3")
+require 'rack-flash'
 require File.dirname(__FILE__)+'/lib/user'
-#require File.dirname(__FILE__)+'/lib/static_files'
-DataMapper.auto_upgrade!
-
-# need to require this after require of lib/user
 require File.dirname(__FILE__) + '/lib/authenticator'
 
-class CoderDojoWebStorage < Sinatra::Base
-  configure do
-    Sinatra::Application.reset!
-    use Rack::Reloader
-  end
+DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite://#{File.dirname(__FILE__)}/db.sqlite3")
+DataMapper.auto_upgrade!
 
+
+class CoderDojoWebStorage < Sinatra::Base
+
+  # @todo this should be set in a configuration file
   set    :session_secret, "abc123"
   PWSALT = "abc123"
 
-  # depends on warden
+  enable :sessions
+  use Rack::Flash
+
+  # use authentication
   register Sinatra::Authenticator
-
-
-
   helpers do
-    Sinatra::Authenticator::Helpers
+    include Rack::Utils
+    alias_method :h, :escape_html
   end
 
   get "/" do
     erb :index
   end
 
+  ["/om", "/about"].each do |about_url|
+    get about_url do
+      erb :about
+    end
+  end
+
+  # user signup
   get "/signup" do
     @user = User.new
     erb :signup
@@ -41,14 +46,43 @@ class CoderDojoWebStorage < Sinatra::Base
   post "/signup" do
     @user = User.new params[:user]
     if @user.save
-      redirect "/users/#{@user.username}"
+      erb :show_user
     else
       erb :signup
     end
   end
 
+  # simple list of all the users in the system
+  get "/list" do
+    ensure_authenticated!
+    @users = User.all
+    erb :listusers
+  end
+
+  # edit a user, changing password etc.
+  # ensure admin if not editing self
+  get "/edit/:username" do
+    ensure_authenticated!
+    @user = User.first :username => params[:username]
+    halt(403) unless @user.is_editable_by current_user
+    erb :edituser
+  end
+
+  post "/edit/:username" do
+    ensure_authenticated!
+    @user = User.first :username => params[:username]
+    halt(403) unless @user.is_editable_by current_user
+    # @todo implement
+  end
+
+  get "/show/:username" do
+    @user = User.first :username =>  params[:username]
+    erb :show_user
+  end
+
   get "/upload" do
     ensure_authenticated!
+    erb :upload
   end
   
   post "/upload" do
@@ -71,27 +105,6 @@ class CoderDojoWebStorage < Sinatra::Base
       end
     end
     redirect current_user.file_path(name)
-  end
-
-
-  get "/users" do
-    ensure_authenticated!
-  end
-
-  get "/users/:username/update" do
-    @user = User.first :username => params[:username]
-  end
-
-  post "/users/:username/update" do
-    @user = User.first :username => params[:username]
-    unless @user.id.eql? session[:user_id]
-      ensure_admin!
-    end
-  end
-
-  get "/users/:username" do
-    @user = User.first :username =>  params[:username]
-    erb :show_user
   end
 
 end

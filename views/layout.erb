@@ -2,15 +2,40 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title><%= @title || "CoderDojo Malmö - Web storage" %></title>
+    <title><%= h @title || "CoderDojo Malmö - Web storage" %></title>
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
   </head>
   <body>
-
-    <head>
-      &nbsp; (nav)
-    </head>
+    <header class="clearfix">
     <div class="container">
+      <div class="nav navbar">
+        <a class="brand" href="/">CoderDojo Hemsideutrymme</a>
+        <% if is_authenticated? %>
+          <ul class="nav">
+            <li>
+              <form method="post" action="/signout">
+                <input type="hidden" name="_method" value="delete"/>
+                <input type="submit" class="btn" value="Logga ut"/>
+              </form>
+            </li>
+          </ul>
+        <% else %>
+          <ul class="nav">
+            <li><a href="/signin" class="btn">Logga in</a> </li>
+            <li><a href="/signup" class="btn">registrera dig</a></li>
+          </ul>
+        <% end %>
+      </div>
+    </div>
+    </header>
+    <div class="container">
+      <% [:notice, :error].each do |flash_type|
+        if flash.has? flash_type  %>
+          <div class="alert alert-<%=h flash_type%>">
+            <%= h flash[flash_type]%>
+          </div>
+        <% end
+      end %>
       <%= yield %>
     </div>
     <script type="text/javascript" src="/js/jquery.js"></script>

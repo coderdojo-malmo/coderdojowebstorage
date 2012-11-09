@@ -1,8 +1,20 @@
-i am signup
-<form method="post" action="/signup">
-  <%= @user.errors.collect{|e| "#{e}"}.join("<br/>") %>
+<h1>Registrera dig</h1>
+<form method="post" action="/signup" class="form-horizontal">
+  <% unless @user.errors.empty? %>
+    <div class="alert alert-error">
+      <% @user.errors.each do |e|%>
+        <p><%= h("#{e}".gsub('["',"").gsub('"]',""))%></p>
+      <% end %>
+    </div>
+  <% end %>
 
-  <input type="text" name="user[username]" value="<%= @user.username %>" placeholder="Användarnamn"/>
-  <input type="password" name="user[password]" value="" placeholder="Lösenord"/>
-  <input type="submit" class="btn"/>
+  <div class="control-group">
+    <input type="text" name="user[username]" value="<%= h @user.username %>" placeholder="Användarnamn"/>
+  </div>
+  <div class="control-group">
+      <input type="password" name="user[password]" value="" placeholder="Lösenord"/>
+  </div>
+  <div class="control-group">
+    <input type="submit" class="btn btn-primary" value="Registrera!"/>
+  </div>
 </form>

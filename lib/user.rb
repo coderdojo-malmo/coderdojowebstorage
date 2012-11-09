@@ -12,9 +12,11 @@ class User
   property :created_at,         DateTime
   property :updated_at,         DateTime
 
-  validates_uniqueness_of :username
-  validates_format_of :username, :as => /^[a-zA-Z0-9]+$/
-  validates_length_of :encrypted_password, :min => 64, :max => 74, :message => 'Du måste ange lösenord'
+  validates_uniqueness_of :username,
+                          :message => "Användarnamnet finns redan registrerat"
+  validates_format_of     :username, :as => /^[a-zA-Z0-9]+$/
+  validates_length_of     :encrypted_password, :min => 64, :max => 74,
+                          :message => 'Du måste ange lösenord'
 
 
   attr_accessible :username, :password
@@ -33,10 +35,11 @@ class User
     "/public/u/#{self.username}/#{file_name}"
   end
 
+  # authentication with a very simple layer
+  # on top of bcrypt
   def self.authenticate_by_password(username, password)
-    puts "will try to authenticate #{username} with pass #{password}"
     user = User.first :username => username
-    return nil unless user
+    return false unless user
     salt = User.salt_from_hash(user.encrypted_password)
     hash_string = User.hash_string(password, salt)
     pass_string = user.encrypted_password[10..user.encrypted_password.size]
@@ -44,18 +47,11 @@ class User
     if pass == hash_string
       user
     else
-      nil
+      false
     end
   end
 
   private
-
-  before :valid? do
-    if self.password.nil? || self.password.empty?
-    else
-      encrypt_password!
-    end
-  end
 
   def encrypt_password!
     hash_string = User.hash_string(password)
@@ -63,8 +59,6 @@ class User
     pass = BCrypt::Password.create(hash_string)
     self.encrypted_password = "#{salt}#{pass}"
   end
-
-
 
   def self.hash_string(plain, salt = nil)
     salt ||= SecureRandom.hex(5)
@@ -80,6 +74,15 @@ class User
 
   def self.salt_from_hash(h)
     h[0..9]
+  end
+
+  # remember to encrypt the password before validation
+  # otherwise, the validation is failed due to checking length
+  # on encrypted_password field
+  before :valid? do
+    if self.password && !self.password.empty?
+      encrypt_password!
+    end
   end
 
 end

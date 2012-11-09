@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'sinatra'
+gem 'rack-flash3', :require => 'rack-flash'
 gem 'data_mapper'
 gem 'dm-rails', :require => 'dm-rails/mass_assignment_security'
 gem 'warden'

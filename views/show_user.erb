@@ -1,1 +1,4 @@
-OHAI YOU ARE LOOKING AT <%= @user.username %>
+<h1><%= h @user.username %></h1>
+<div>
+  <a href="/u/<%= h @user.username %>">hemsida</a>
+</div>
