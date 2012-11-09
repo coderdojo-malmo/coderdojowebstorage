@@ -1,3 +1,6 @@
+" see
+" https://github.com/qzio/dotfiles/blob/master/vim/vim.symlink/plugin/enablelvimrc.vim
+" on how to use this file
 set expandtab
 set tabstop=2
 set softtabstop=2
