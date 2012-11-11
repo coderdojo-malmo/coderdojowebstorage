@@ -10,6 +10,10 @@ gem 'rspec'
 gem 'rspec-core'
 gem 'rack-test'
 
+# is there a better alternative to filemagic?
+# ruby-filemagic requires deb package libmagic-dev
+gem 'ruby-filemagic'
+
 group :development do
   gem 'dm-sqlite-adapter'
 end

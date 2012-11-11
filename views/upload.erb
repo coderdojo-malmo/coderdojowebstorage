@@ -1,0 +1,17 @@
+<% if @errors %>
+  <% @errors.each do |e| %>
+    <p class="alert alert-error"><%= h e %></p>
+  <% end %>
+<% end %>
+<form method="post" action="/upload" enctype="multipart/form-data" >
+  <div class="control-group">
+    <label>Fil</label>
+    <div class="controls">
+      <input type="file" name="file"/>
+    </div>
+  </div>
+
+  <div class="controls">
+    <input type="submit" class="btn btn-primary" />
+  </div>
+</form>

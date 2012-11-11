@@ -13,6 +13,7 @@ test/version_tmp
 tmp
 
 db.*
+public/u/*
 
 # YARD artifacts
 .yardoc

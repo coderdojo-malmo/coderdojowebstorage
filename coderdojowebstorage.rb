@@ -5,6 +5,7 @@ require 'rack-flash'
 require 'data_mapper'
 require 'rack-flash'
 require File.dirname(__FILE__)+'/lib/user'
+require File.dirname(__FILE__)+'/lib/user_file'
 require File.dirname(__FILE__) + '/lib/authenticator'
 
 DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite://#{File.dirname(__FILE__)}/db.sqlite3")
@@ -54,7 +55,7 @@ class CoderDojoWebStorage < Sinatra::Base
 
   # simple list of all the users in the system
   get "/list" do
-    ensure_authenticated!
+    ensure_admin!
     @users = User.all
     erb :listusers
   end
@@ -86,25 +87,14 @@ class CoderDojoWebStorage < Sinatra::Base
   end
   
   post "/upload" do
-    # @todo move this logic into lib/ something
     ensure_authenticated!
-    unless params[:file] && (tmpfile = params[:file][:tempfile]) && (name = params[:file][:filename])
-      return erb :upload
+    if new_uri = current_user.upload_file(params[:file])
+      redirect new_uri
+    else
+      @errors = current_user.custom_errors
+      erb :upload
     end
-    target_dir = current_user.file_dir
-    while blk = tmpfile.read(65536)
-      unless File.directory? target_dir
-        Dir.mkdir target_dir
-      end
-      begin
-        File.open(File.join(target_dir, name), "wb") do |f|
-          f.write(tmpfile.read)
-        end
-      rescue Exception, e
-        puts "exception writing file: #{e}"
-      end
-    end
-    redirect current_user.file_path(name)
+
   end
 
 
@@ -118,9 +108,7 @@ class CoderDojoWebStorage < Sinatra::Base
 
   post "/users/:username/update" do
     @user = User.first :username => params[:username]
-    unless @user.id.eql? session[:user_id]
-      ensure_admin!
-    end
+    ensure_admin! unless @user.id.eql?(current_user.id)
   end
 
   get "/users/:username" do

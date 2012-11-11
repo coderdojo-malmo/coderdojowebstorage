@@ -20,7 +20,7 @@ class User
 
 
   attr_accessible :username, :password
-  attr_accessor   :password
+  attr_accessor   :password, :custom_errors
 
   attr_reader     :encrypted_password,
                   :auth_level,
@@ -31,8 +31,21 @@ class User
     File.dirname(__FILE__)+'/../public/u/'+self.username
   end
 
-  def file_path(file_name)
-    "/public/u/#{self.username}/#{file_name}"
+  def file_uri(file_name)
+    "/u/#{self.username}/#{file_name}"
+  end
+
+  def upload_file(file_hash)
+    user_file = UserFile.new file_hash
+    if uri = user_file.save_for(self)
+      uri
+    else
+      custom_errors = []
+      user_file.errors.each do |e|
+        custom_errors << e
+      end
+      false
+    end
   end
 
   # authentication with a very simple layer

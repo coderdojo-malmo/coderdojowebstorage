@@ -15,8 +15,17 @@ module Sinatra
         warden.user
       end
 
+      def is_admin?
+        ensure_authenticated!
+        current_user.is_admin?
+      end
+
       def ensure_authenticated!
         halt(403) unless is_authenticated?
+      end
+
+      def ensure_admin!
+        halt(403) unless is_admin?
       end
     end
   end
