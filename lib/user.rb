@@ -31,6 +31,11 @@ class User
     File.dirname(__FILE__)+'/../public/u/'+self.username
   end
 
+  def files
+    #TODO recurse dirs
+    Dir.entries(self.file_dir).reject { |f| f[0] == '.' }
+  end
+
   def file_uri(file_name)
     "/u/#{self.username}/#{file_name}"
   end

@@ -29,6 +29,9 @@ class CoderDojoWebStorage < Sinatra::Base
   end
 
   get "/" do
+    if is_authenticated?
+      @files = current_user.files
+    end
     erb :index
   end
 
@@ -117,6 +120,7 @@ class CoderDojoWebStorage < Sinatra::Base
   end
 
   get "/jonashemligatillhall" do
+    ensure_authenticated!
     erb :editor
   end
 

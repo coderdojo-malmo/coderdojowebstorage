@@ -3,4 +3,12 @@
   <p>Här kan du lägga upp din egen hemsida!</p>
   <p>Den här siten är gjord för CoderDojo Malmö</p>
   <p> TBD mer text</p>
+  <% if defined? @files %>
+    <p>Dina filer:</p>
+    <ul>
+      <% @files.each do |file| %>
+        <li><a href=<%= current_user.file_uri file %>><%= file %></a>
+      <% end %>
+    </ul>
+  <% end %>
 </div>
