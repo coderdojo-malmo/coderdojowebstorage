@@ -1,7 +1,23 @@
-<div id=editor>alaskaslask</div>
+<button id=gogogo class=btn>Gogogo</button>
+<div id=editor>&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+  &lt;body&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</div>
+<iframe id=preview src="about:empty"></iframe>
 <script type="text/javascript" src="/js/ace-src-min-noconflict/ace.js"></script>
 <script>
   var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");
-  editor.getSession().setMode("ace/mode/javascript");
+  var session = editor.getSession();
+  session.setMode("ace/mode/html");
+  session.setTabSize(2);
+  session.setUseWrapMode(true);
+
+  $('#gogogo').click(function() {
+    var previewDoc = document.getElementById('preview').contentWindow.document;
+    previewDoc.open('text/html', 'replace');
+    previewDoc.write(editor.getValue());
+    previewDoc.close();
+  });
 </script>
