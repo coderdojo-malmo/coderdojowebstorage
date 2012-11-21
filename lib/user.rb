@@ -83,8 +83,11 @@ class User
 
   def content_of(file_name)
     content = ''
-    File.open(self.file_path(file_name), 'r') do |f|
-      content = f.read
+    begin
+      File.open(self.file_path(file_name), 'r') do |f|
+        content = f.read
+      end
+    rescue
     end
     content
   end
