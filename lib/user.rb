@@ -72,7 +72,7 @@ class User
   end
 
   def update_file(file_name, content)
-    unless UserFile.update(self.file_path(file_name), content)
+    if UserFile.update(self.file_path(file_name), content)
       true
     else
       custom_errors = []
