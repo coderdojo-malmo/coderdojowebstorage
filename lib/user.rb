@@ -27,6 +27,10 @@ class User
                   :created_at,
                   :updated_at
 
+  def is_admin?
+    (auth_level > 5)
+  end
+
   def file_dir
     File.dirname(__FILE__)+'/../public/u/'+self.username
   end
