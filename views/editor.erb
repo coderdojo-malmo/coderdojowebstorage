@@ -1,4 +1,7 @@
-<button id=gogogo class=btn>Gogogo</button>
+<button class="btn" id="save">Save</button>
+<form id="upload_form" action="" method="post">
+  <textarea id="upload_file_content" name="file_content" style="display: none;"></textarea>
+</form>
 <div id=editor><%= h @file_content %></div>
 <iframe id=preview src="about:empty"></iframe>
 <script type="text/javascript" src="/js/ace-src-min-noconflict/ace.js"></script>
@@ -19,9 +22,14 @@
     previewDoc.write(editor.getValue());
     previewDoc.close();
   }
-
   // update preview once now
   updatePreview();
   // and when no change has been detected for a while
   editor.on("change", $.debounce(500, updatePreview));
+
+  // save
+  $('#save').click(function() {
+    $('#upload_file_content').val(editor.getValue());
+    $('#upload_form').submit();
+  });
 </script>
