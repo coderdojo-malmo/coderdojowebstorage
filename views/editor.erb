@@ -2,6 +2,7 @@
 <div id=editor><%= h @file_content %></div>
 <iframe id=preview src="about:empty"></iframe>
 <script type="text/javascript" src="/js/ace-src-min-noconflict/ace.js"></script>
+<script type="text/javascript" src="/js/jquery.ba-throttle-debounce.min.js"></script>
 <script>
   // init editor
   var editor = ace.edit("editor");
@@ -12,7 +13,6 @@
   session.setUseWrapMode(true);
 
   // preview updating
-
   function updatePreview() {
     var previewDoc = document.getElementById('preview').contentWindow.document;
     previewDoc.open('text/html', 'replace');
@@ -22,6 +22,6 @@
 
   // update preview once now
   updatePreview();
-  // and when button's clicked
-  $('#gogogo').click(function() { updatePreview(); });
+  // and when no change has been detected for a while
+  editor.on("change", $.debounce(500, updatePreview));
 </script>
