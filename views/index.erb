@@ -11,5 +11,15 @@
       <% end %>
     </ul>
     <a class=btn href="/upload">Ladda upp fil</a>
+    <form id="createfile_form" class="form-inline">
+      <input id="createfile_name" type="text" placeholder="Filnamn">
+      <button type="submit" class="btn">Skapa fil</a>
+    </form>
+    <script>
+      $('#createfile_form').submit(function create_file() {
+        window.location = '/editor/' + $('#createfile_name').val()
+        return false;
+      });
+    </script>
   <% end %>
 </div>
