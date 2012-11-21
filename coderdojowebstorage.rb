@@ -121,11 +121,23 @@ class CoderDojoWebStorage < Sinatra::Base
 
   get "/editor/*" do
     ensure_authenticated!
-    @file = current_user.file_path(params[:splat][0])
-    f = File.open @file, 'r'
-    @file_content = f.read
-    f.close
+    #@file = current_user.file_path(File.basename(params[:splat][0]))
+    #f = File.open @file, 'r'
+    #@file_content = f.read
+    #f.close
+    @file_content = current_user.content_of File.basename(params[:splat][0])
     erb :editor
+  end
+
+  post "/editor/*" do
+    ensure_authenticated!
+    file_name = File.basename(params[:splat][0])
+    if current_user.update_file(file_name, params[:file_content])
+      redirect current_user.file_uri(file_name)
+    else
+      @file_content = current_user.content_of(file_name)
+      erb :editor
+    end
   end
 
 end

@@ -14,3 +14,11 @@
   right: 0px;
   height: 100%;
 }
+
+.navbar .nav li a.btn {
+  color: black;
+  background-color: #ccc;;
+}
+.navbar .nav li a.btn:hover {
+  background-color: #ccc;
+}

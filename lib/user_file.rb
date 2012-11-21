@@ -16,6 +16,7 @@ class UserFile
     end
   end
 
+
   def file_name=(name)
     @file_name = name.chomp.gsub(" ", "-").gsub("/","").gsub("..","")
   end
@@ -54,6 +55,19 @@ class UserFile
       end
     end
     return user.file_uri(self.file_name)
+  end
+
+  def self.update(file_path, content)
+    begin
+      File.open(File.join(file_path), "wb") do |f|
+        f.write(content)
+      end
+    rescue Exception, e
+      puts "exception writing the uploaded file to disk: #{e}"
+      self.errors << "lyckades inte spara filen ordentligt?"
+      return false
+    end
+    true
   end
 
   private

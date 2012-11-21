@@ -51,6 +51,10 @@ class User
     if file[0, dir.size] != dir
       raise "#{file_name} is trying to access file outside #{dir}"
     end
+    if file.index('..')
+      puts "someone trying to hack us? tries to access #{file}"
+      raise "#{file_name} unable to open file"
+    end
     file
   end
 
@@ -65,6 +69,24 @@ class User
       end
       false
     end
+  end
+
+  def update_file(file_name, content)
+    unless UserFile.update(self.file_path(file_name), content)
+      true
+    else
+      custom_errors = []
+      custom_errors << "fil kunde inte uppdateras"
+      false
+    end
+  end
+
+  def content_of(file_name)
+    content = ''
+    File.open(self.file_path(file_name), 'r') do |f|
+      content = f.read
+    end
+    content
   end
 
   # authentication with a very simple layer
