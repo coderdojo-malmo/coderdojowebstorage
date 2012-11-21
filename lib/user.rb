@@ -40,6 +40,20 @@ class User
     "/u/#{self.username}/#{file_name}"
   end
 
+  def file_edit_uri(file_name)
+    "/editor/#{self.username}/#{file_name}"
+  end
+
+  def file_path(file_name)
+    file = File.expand_path(file_name, self.file_dir)
+    # ensure user isn't trying to hack us
+    dir = File.expand_path(self.file_dir)
+    if file[0, dir.size] != dir
+      raise "#{file_name} is trying to access file outside #{dir}"
+    end
+    file
+  end
+
   def upload_file(file_hash)
     user_file = UserFile.new file_hash
     if uri = user_file.save_for(self)

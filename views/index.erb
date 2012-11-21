@@ -7,7 +7,7 @@
     <p>Dina filer:</p>
     <ul>
       <% @files.each do |file| %>
-        <li><a href=<%= current_user.file_uri file %>><%= file %></a>
+        <li><a href=/editor/<%= file %>><%= file %></a> <a href=<%= current_user.file_uri file %>><i class=icon-eye-open></i></a>
       <% end %>
     </ul>
   <% end %>

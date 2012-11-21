@@ -119,8 +119,12 @@ class CoderDojoWebStorage < Sinatra::Base
     erb :show_user
   end
 
-  get "/jonashemligatillhall" do
+  get "/editor/*" do
     ensure_authenticated!
+    @file = current_user.file_path(params[:splat][0])
+    f = File.open @file, 'r'
+    @file_content = f.read
+    f.close
     erb :editor
   end
 

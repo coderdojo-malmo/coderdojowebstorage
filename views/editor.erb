@@ -1,12 +1,9 @@
 <button id=gogogo class=btn>Gogogo</button>
-<div id=editor>&lt;!DOCTYPE HTML&gt;
-&lt;html&gt;
-  &lt;body&gt;
-  &lt;/body&gt;
-&lt;/html&gt;</div>
+<div id=editor><%= h @file_content %></div>
 <iframe id=preview src="about:empty"></iframe>
 <script type="text/javascript" src="/js/ace-src-min-noconflict/ace.js"></script>
 <script>
+  // init editor
   var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");
   var session = editor.getSession();
@@ -14,10 +11,17 @@
   session.setTabSize(2);
   session.setUseWrapMode(true);
 
-  $('#gogogo').click(function() {
+  // preview updating
+
+  function updatePreview() {
     var previewDoc = document.getElementById('preview').contentWindow.document;
     previewDoc.open('text/html', 'replace');
     previewDoc.write(editor.getValue());
     previewDoc.close();
-  });
+  }
+
+  // update preview once now
+  updatePreview();
+  // and when button's clicked
+  $('#gogogo').click(function() { updatePreview(); });
 </script>
