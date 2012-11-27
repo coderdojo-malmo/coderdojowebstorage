@@ -12,7 +12,17 @@
   var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");
   var session = editor.getSession();
-  session.setMode("ace/mode/html");
+  switch('<%= @file_type.to_s %>') {
+    case 'html':
+      session.setMode("ace/mode/html");
+      break;
+    case 'css':
+      session.setMode("ace/mode/css");
+      break;
+    case 'js':
+      session.setMode("ace/mode/javascript");
+      break;
+  }
   session.setTabSize(2);
   session.setUseWrapMode(true);
 
