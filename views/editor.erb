@@ -1,4 +1,5 @@
-<button class="btn" id="save">Save</button>
+<button class="btn" id="save">Spara</button>
+<a class="btn" id="open" href="<%= @user_base_url + @file_name %>" target="_blank">Öppna i nytt fönster</a>
 <form id="upload_form" action="" method="post">
   <textarea id="upload_file_content" name="file_content" style="display: none;"></textarea>
 </form>
@@ -23,7 +24,7 @@
   }
   function updatePreview() {
     var html = editor.getValue();
-    html = insertBaseTag(html, '/u/<%= current_user.username %>/');
+    html = insertBaseTag(html, '<%= @user_base_url %>');
     var previewDoc = document.getElementById('preview').contentWindow.document;
     previewDoc.open('text/html', 'replace');
     previewDoc.write(html);

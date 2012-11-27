@@ -145,7 +145,9 @@ class CoderDojoWebStorage < Sinatra::Base
 
   get "/editor/*" do
     ensure_authenticated!
-    @file_content = current_user.content_of File.basename(params[:splat][0])
+    @file_name = File.basename(params[:splat][0])
+    @file_content = current_user.content_of @file_name
+    @user_base_url = "/u/#{current_user.username}/"
     erb :editor
   end
 
