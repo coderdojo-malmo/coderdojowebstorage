@@ -36,6 +36,9 @@
 
   // save
   $('#save').click(function() {
+    // prevent display of onbeforeunload dialog since editor is dirty
+    window.onbeforeunload = function() { return; };
+    // submit
     $('#upload_file_content').val(editor.getValue());
     $('#upload_form').submit();
   });
