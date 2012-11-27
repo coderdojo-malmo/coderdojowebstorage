@@ -153,12 +153,11 @@ class CoderDojoWebStorage < Sinatra::Base
     ensure_authenticated!
     file_name = File.basename(params[:splat][0])
     if current_user.update_file(file_name, params[:file_content])
-      flash.now[:notice] = 'Filen sparades'
+      flash[:notice] = 'Filen sparades'
     else
-      flash.now[:error] = 'filen kunde inte sparas!'
+      flash[:error] = 'filen kunde inte sparas!'
     end
-    @file_content = current_user.content_of(file_name)
-    erb :editor
+    redirect "/editor/#{file_name}"
   end
 
 end
