@@ -16,10 +16,17 @@
   session.setUseWrapMode(true);
 
   // preview updating
+  function insertBaseTag(html, href) {
+    // make sure relative paths work and that links are opened in another page
+    // hacky-by-works :-)
+    return '<base href="' + href + '" target="_blank" />' + html;
+  }
   function updatePreview() {
+    var html = editor.getValue();
+    html = insertBaseTag(html, '/u/<%= current_user.username %>/');
     var previewDoc = document.getElementById('preview').contentWindow.document;
     previewDoc.open('text/html', 'replace');
-    previewDoc.write(editor.getValue());
+    previewDoc.write(html);
     previewDoc.close();
   }
   // update preview once now
