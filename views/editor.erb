@@ -39,4 +39,14 @@
     $('#upload_file_content').val(editor.getValue());
     $('#upload_form').submit();
   });
+  // warn user when trying to navigate away from page with changes
+  var injectedOnBeforeUnload = false;
+  editor.on('change', function() {
+    if (!injectedOnBeforeUnload) {
+      window.onbeforeunload = function() {
+        return 'Du har ändringar som inte sparats.';
+      };
+      injectedOnBeforeUnload = true;
+    }
+  });
 </script>
