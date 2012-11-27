@@ -57,10 +57,34 @@ class CoderDojoWebStorage < Sinatra::Base
   end
 
   # simple list of all the users in the system
-  get "/list" do
+  get "/handleusers" do
     ensure_admin!
     @users = User.all
-    erb :listusers
+    erb :handleusers
+  end
+
+  post "/handleusers/changeauthlevel/:username" do
+    ensure_admin!
+    @user = User.first :username => params[:username]
+    @user.auth_level = params[:auth_level]
+    if @user.save
+      flash[:notice] = "#{@user.username} har nu status #{@user.role}"
+    else
+      flash[:error] = "Lyckades inte ändra #{@user.username} status till #{User.role_name(params[:auth_level])}"
+    end
+    redirect "/handleusers"
+  end
+
+  post "/handleusers/newpassword/:username" do
+    ensure_admin!
+    @user = User.first :username => params[:username]
+    @user.password = params[:new_password]
+    if @user.save
+      flash[:notice] = "#{@user.username} har ett nytt lösenord"
+    else
+      flash[:error] = "Lyckades inte sätta ett nytt lösenord till #{@user.username}"
+    end
+    redirect "/handleusers"
   end
 
   # edit a user, changing password etc.

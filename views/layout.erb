@@ -13,8 +13,10 @@
         <a class="brand" href="/">CoderDojo Hemsideutrymme</a>
         <% if is_authenticated? %>
           <ul class="nav">
+            <% if is_admin? %>
+              <li><a href="/handleusers">Hantera användare</a></li>
+            <% end %>
             <li>
-
               <form method="post" action="/signout">
                 <input type="hidden" name="_method" value="delete"/>
                 <input type="submit" class="btn btn-primary" value="Logga ut"/>

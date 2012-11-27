@@ -28,7 +28,23 @@ class User
                   :updated_at
 
   def is_admin?
-    (auth_level > 5)
+    (auth_level >= 10)
+  end
+
+  def is_mentor?
+    (auth_level >= 5)
+  end
+
+  def is_confirmed?
+    (auth_level >= 4)
+  end
+
+  def is_registered?
+    (self.id > 0)
+  end
+
+  def role
+    User.role_name self.auth_level
   end
 
   def file_dir
@@ -37,7 +53,9 @@ class User
 
   def files
     #TODO recurse dirs
-    Dir.entries(self.file_dir).reject { |f| f[0] == '.' }
+    FileUtils.mkdir_p(self.file_dir) unless File.directory? self.file_dir
+
+    Dir.entries(self.file_dir).reject { |f| (f[0] == '.' || f[0] == '..') }
   end
 
   def file_uri(file_name)
@@ -109,6 +127,18 @@ class User
       user
     else
       false
+    end
+  end
+
+  def self.role_name(auth_level)
+    if auth_level >= 10
+      "admin"
+    elsif auth_level >= 5
+      "mentor"
+    elsif auth_level >= 4
+      "confirmed"
+    else
+      "unconfirmed"
     end
   end
 

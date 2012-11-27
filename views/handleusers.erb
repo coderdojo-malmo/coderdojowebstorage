@@ -1,0 +1,40 @@
+<table class="table">
+  <tr><th>Namn</th><th>Ändra status</th><th>Nytt lösenord</th></tr>
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= h user.username %></td>
+      <td>
+        <form
+          method="post"
+          action="/handleusers/changeauthlevel/<%= h user.username %>"
+          class="form-search" style="margin: 0">
+          <select name="auth_level">
+            <% [10,5,4,0].each do |i| %>
+              <option <%= user.auth_level.eql?(i) ? 'selected="selected"' : ''%>
+              value="<%= i %>">
+              <%= h User.role_name(i)%>
+              </option>
+            <% end %>
+          </select>
+        </form>
+      </td>
+      <td>
+        <form
+          method="post"
+          action="/handleusers/newpassword/<%= h user.username %>"
+          class="form-search" style="margin: 0">
+          <input type="text" name="new_password"/>
+          <input type="submit" value="Sätt nytt" class="btn btn-warning"/>
+        </form>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<script type="text/javascript">
+  $(document).ready(function() {
+      $('select').change(function() {
+        var me = $(this);
+        me.parent().submit();
+        });
+      });
+    </script>
