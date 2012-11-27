@@ -7,7 +7,16 @@
     <p>Dina filer:</p>
     <ul>
       <% @files.each do |file| %>
-        <li><a href=/editor/<%= file %>><%= file %></a> <a href=<%= current_user.file_uri file %>><i class=icon-eye-open></i></a>
+        <% type = file_type(file) %>
+        <li>
+        <% if is_editable? type %>
+          <a href=/editor/<%= file %>><%= file %></a>
+        <% else %>
+          <%= file %>
+        <% end %>
+        <% if is_viewable? type %>
+          <a href=<%= current_user.file_uri file %>><i class=icon-eye-open></i></a>
+        <% end %>
       <% end %>
     </ul>
     <a class=btn href="/upload">Ladda upp fil</a>

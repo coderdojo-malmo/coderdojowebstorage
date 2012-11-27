@@ -7,6 +7,7 @@ require 'rack-flash'
 require File.dirname(__FILE__)+'/lib/user'
 require File.dirname(__FILE__)+'/lib/user_file'
 require File.dirname(__FILE__) + '/lib/authenticator'
+require File.dirname(__FILE__)+'/lib/filetype_helpers'
 
 DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite://#{File.dirname(__FILE__)}/db.sqlite3")
 DataMapper.auto_upgrade!
@@ -27,6 +28,7 @@ class CoderDojoWebStorage < Sinatra::Base
     include Rack::Utils
     alias_method :h, :escape_html
   end
+  helpers Sinatra::FiletypeHelpers
 
   get "/" do
     if is_authenticated?
