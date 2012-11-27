@@ -3,9 +3,13 @@
 
 #editor {
   position: absolute;
-  width: 50%;
+  width: 100%;
   left: 0px;
   height: 100%;
+}
+
+#editor.with-preview {
+  width: 50%;
 }
 
 #preview {

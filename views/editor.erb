@@ -8,11 +8,12 @@
 <script type="text/javascript" src="/js/ace-src-min-noconflict/ace.js"></script>
 <script type="text/javascript" src="/js/jquery.ba-throttle-debounce.min.js"></script>
 <script>
+  var filetype = '<%= @file_type.to_s %>';
   // init editor
   var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");
   var session = editor.getSession();
-  switch('<%= @file_type.to_s %>') {
+  switch(filetype) {
     case 'html':
       session.setMode("ace/mode/html");
       break;
@@ -26,24 +27,30 @@
   session.setTabSize(2);
   session.setUseWrapMode(true);
 
-  // preview updating
-  function insertBaseTag(html, href) {
-    // make sure relative paths work and that links are opened in another page
-    // hacky-by-works :-)
-    return '<base href="' + href + '" target="_blank" />' + html;
+  if (filetype == 'html') {
+    $('#editor').addClass('with-preview');
+
+    // preview updating
+    function insertBaseTag(html, href) {
+      // make sure relative paths work and that links are opened in another page
+      // hacky-by-works :-)
+      return '<base href="' + href + '" target="_blank" />' + html;
+    }
+    function updatePreview() {
+      var html = editor.getValue();
+      html = insertBaseTag(html, '<%= @user_base_url %>');
+      var previewDoc = document.getElementById('preview').contentWindow.document;
+      previewDoc.open('text/html', 'replace');
+      previewDoc.write(html);
+      previewDoc.close();
+    }
+    // update preview once now
+    updatePreview();
+    // and when no change has been detected for a while
+    editor.on("change", $.debounce(500, updatePreview));
+  } else {
+    $('#preview').hide();
   }
-  function updatePreview() {
-    var html = editor.getValue();
-    html = insertBaseTag(html, '<%= @user_base_url %>');
-    var previewDoc = document.getElementById('preview').contentWindow.document;
-    previewDoc.open('text/html', 'replace');
-    previewDoc.write(html);
-    previewDoc.close();
-  }
-  // update preview once now
-  updatePreview();
-  // and when no change has been detected for a while
-  editor.on("change", $.debounce(500, updatePreview));
 
   // save
   $('#save').click(function() {
