@@ -1,8 +1,8 @@
 module Sinatra
   module FiletypeHelpers
     def file_type(file_name)
-      case File.extname(file_name)
-      when '.html' then :html
+      case File.extname(file_name).downcase
+      when '.html', '.htm' then :html
       when '.css' then :css
       when '.js' then :js
       when '.png', '.gif', '.jpg', '.jpeg' then :image
