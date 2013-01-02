@@ -14,11 +14,14 @@ gem 'rack-test'
 # ruby-filemagic requires deb package libmagic-dev
 gem 'ruby-filemagic'
 
+# handle unicorn or other stuff..
+gem 'foreman'
+gem 'unicorn'
+
 group :development do
   gem 'dm-sqlite-adapter'
 end
 group :production do
-  gem 'dm-postgres-adapter'
 end
 
 
