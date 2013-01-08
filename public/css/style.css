@@ -19,10 +19,6 @@
   height: 100%;
 }
 
-.navbar .nav li a.btn {
-  color: black;
-  background-color: #ccc;;
-}
-.navbar .nav li a.btn:hover {
-  background-color: #ccc;
+header {
+  margin-top: 1em;
 }

@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'fileutils'
 require 'filemagic'
 class UserFile
@@ -25,13 +26,18 @@ class UserFile
   # @todo more validation
   def valid?
     return false unless self.errors.empty?
+
+    unless UserFile.valid_file_ends.include?(File.extname(self.file_name))
+      self.errors << "ogiltig filändelse: #{File.extname(self.file_name)}"
+    end
+
     filemagic = FileMagic.new(FileMagic::MAGIC_MIME)
     mime = filemagic.file(self.tmpfile.path)
     spl = mime.split(";")
     mime_type = spl[0]
     filemagic.close
     unless UserFile.valid_mime_types.include? mime_type
-      self.errors << "ogiltig filtyp"
+      self.errors << "ogiltig filtyp: #{mime_type}"
     end
     self.errors.empty?
   end
@@ -76,6 +82,13 @@ class UserFile
     [
       "text/plain", "text/html", "text/xml", "text/xhtml", "text/json",
       "image/jpeg", "image/png", "image/gif"
+    ]
+  end
+
+  def self.valid_file_ends
+    [
+      ".txt", ".html", ".xml", ".json",
+      ".jpg", ".jpeg", ".png", ".gif"
     ]
   end
 

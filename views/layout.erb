@@ -9,26 +9,26 @@
   <body>
     <header class="clearfix">
     <div class="container">
-      <div class="nav navbar">
-        <a class="brand" href="/">CoderDojo Hemsideutrymme</a>
-        <% if is_authenticated? %>
-          <ul class="nav">
-            <% if is_admin? %>
-              <li><a href="/handleusers">Hantera användare</a></li>
-            <% end %>
-            <li>
-              <form method="post" action="/signout">
-                <input type="hidden" name="_method" value="delete"/>
-                <input type="submit" class="btn btn-primary" value="Logga ut"/>
-              </form>
-            </li>
+      <div class="navbar">
+        <div class="navbar-inner">
+          <a class="brand" href="/">CoderDojo Hemsideutrymme</a>
+          <ul class="nav pull-right">
+          <% if is_authenticated? %>
+              <% if is_admin? %>
+                <li><a href="/handleusers">Hantera användare</a></li>
+              <% end %>
+              <li>
+                <form method="post" action="/signout" class="navbar-form">
+                  <input type="hidden" name="_method" value="delete"/>
+                  <input type="submit" class="btn btn-primary" value="Logga ut"/>
+                </form>
+              </li>
+          <% else %>
+              <li><a href="/signin" >Logga in</a> </li>
+              <li><a href="/signup" >registrera dig</a></li>
+          <% end %>
           </ul>
-        <% else %>
-          <ul class="nav">
-            <li><a href="/signin" class="btn">Logga in</a> </li>
-            <li><a href="/signup" class="btn">registrera dig</a></li>
-          </ul>
-        <% end %>
+        </div>
       </div>
     </div>
     </header>

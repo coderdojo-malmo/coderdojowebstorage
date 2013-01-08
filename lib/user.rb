@@ -85,9 +85,9 @@ class User
     if uri = user_file.save_for(self)
       uri
     else
-      custom_errors = []
+      self.custom_errors = []
       user_file.errors.each do |e|
-        custom_errors << e
+        self.custom_errors << e
       end
       false
     end

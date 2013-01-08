@@ -1,7 +1,9 @@
 <% if @errors %>
-  <% @errors.each do |e| %>
-    <p class="alert alert-error"><%= h e %></p>
-  <% end %>
+  <p class="alert alert-error">
+    <% @errors.each do |e| %>
+      <%= h e %><br/>
+    <% end %>
+  </p>
 <% end %>
 <form method="post" action="/upload" enctype="multipart/form-data" >
   <div class="control-group">
@@ -12,6 +14,6 @@
   </div>
 
   <div class="controls">
-    <input type="submit" class="btn btn-primary" />
+    <input type="submit" class="btn btn-primary" value="Ladda upp"/>
   </div>
 </form>
