@@ -13,11 +13,12 @@ DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite://#{File.dirname(__FIL
 DataMapper.auto_upgrade!
 
 
+CFG = YAML.load_file(File.dirname(__FILE__)+'/config.yml')
+
 class CoderDojoWebStorage < Sinatra::Base
 
-  # @todo this should be set in a configuration file
-  set    :session_secret, "abc123"
-  PWSALT = "abc123"
+  set    :session_secret, CFG['session_secret']
+  PWSALT = CFG['pwsalt']
 
   enable :sessions
   use Rack::Flash
