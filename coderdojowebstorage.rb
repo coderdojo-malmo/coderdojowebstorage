@@ -171,4 +171,8 @@ class CoderDojoWebStorage < Sinatra::Base
     erb :error_403
   end
 
+  error 404 do
+    erb :error_404
+  end
+
 end
