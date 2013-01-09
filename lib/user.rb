@@ -60,6 +60,9 @@ class User
   end
 
   def file_uri(file_name)
+    if file_name == "index.html"
+      file_name = ""
+    end
     "/u/#{self.username}/#{file_name}"
   end
 
