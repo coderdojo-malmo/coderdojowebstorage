@@ -98,8 +98,8 @@ class User
     if UserFile.update(self.file_path(file_name), content)
       true
     else
-      custom_errors = []
-      custom_errors << "fil kunde inte uppdateras"
+      self.custom_errors = []
+      self.custom_errors << "fil kunde inte uppdateras"
       false
     end
   end
@@ -146,7 +146,7 @@ class User
   private
 
   def encrypt_password!
-    hash_string = User.hash_string(password)
+    hash_string = User.hash_string(self.password)
     salt = User.salt_from_hash(hash_string)
     pass = BCrypt::Password.create(hash_string)
     self.encrypted_password = "#{salt}#{pass}"
