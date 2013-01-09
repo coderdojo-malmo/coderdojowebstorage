@@ -30,7 +30,7 @@ Then,
 
 ### Register the first user
 
-Browse to http://localhost:9292/
+Browse to [http://localhost:9292/](http://localhost:9292/)
 
 Register a user using the webapp.
 
