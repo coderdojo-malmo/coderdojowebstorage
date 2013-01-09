@@ -168,6 +168,12 @@ class User
     h[0..9]
   end
 
+  after :create do
+    path = self.file_path('index.html')
+    FileUtils.mkdir_p(File.dirname(path))
+    FileUtils.cp(File.dirname(__FILE__) + '/../initial-user-index.html', path)
+  end
+
   # remember to encrypt the password before validation
   # otherwise, the validation is failed due to checking length
   # on encrypted_password field
