@@ -16,12 +16,11 @@ module Sinatra
       end
 
       def is_admin?
-        ensure_authenticated!
-        current_user.is_admin?
+        (is_authenticated? && current_user.is_admin?)
       end
 
       def ensure_authenticated!
-        halt(403) unless is_authenticated?
+        halt(403) unless (is_authenticated? && current_user.is_confirmed?)
       end
 
       def ensure_admin!
