@@ -28,7 +28,13 @@ Then,
 
 ## Initial setup
 
-## Make first user admin
+### Register the first user
+
+http://localhost:9292
+
+Register a user using the webapp.
+
+### Make the first user admin
 
     irb
     > require './coderdojowebstorage'
