@@ -27,7 +27,7 @@ class UserFile
   def valid?
     return false unless self.errors.empty?
 
-    unless UserFile.valid_file_ends.include?(File.extname(self.file_name))
+    unless UserFile.valid_file_ends.include?(File.extname(self.file_name).downcase)
       self.errors << "ogiltig filändelse: #{File.extname(self.file_name)}"
     end
 
