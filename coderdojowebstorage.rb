@@ -52,7 +52,7 @@ class CoderDojoWebStorage < Sinatra::Base
   post "/signup" do
     @user = User.new params[:user]
     if @user.save
-      erb :show_user
+      erb :signed_up
     else
       erb :signup
     end
@@ -163,6 +163,11 @@ class CoderDojoWebStorage < Sinatra::Base
       flash[:error] = 'filen kunde inte sparas!'
     end
     redirect "/editor/#{file_name}"
+  end
+
+
+  error 403 do
+    erb :error_403
   end
 
 end
