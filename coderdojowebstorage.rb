@@ -118,7 +118,7 @@ class CoderDojoWebStorage < Sinatra::Base
   post "/upload" do
     ensure_authenticated!
     if new_uri = current_user.upload_file(params[:file])
-      redirect new_uri
+      redirect '/'
     else
       @errors = current_user.custom_errors
       erb :upload
