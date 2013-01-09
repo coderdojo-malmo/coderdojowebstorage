@@ -166,6 +166,9 @@ class CoderDojoWebStorage < Sinatra::Base
     redirect "/editor/#{file_name}"
   end
 
+  get "/u/:username/" do
+    call env.merge("PATH_INFO" => "/u/#{params[:username]}/index.html")
+  end
 
   error 403 do
     erb :error_403
