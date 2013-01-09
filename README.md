@@ -16,6 +16,12 @@ Then,
 
     brew install libmagic
 
+### Create config
+
+    cp config.example.yml config.yml
+
+Replace values in `config.yml` with different values. Use for example [random.org](http://random.org/) for some random data.
+
 ## How to run
 
 ### Compile
