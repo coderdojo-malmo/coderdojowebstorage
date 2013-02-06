@@ -49,16 +49,16 @@ class UserFile
     self.dir_path = user.file_dir
     FileUtils.mkdir_p(self.dir_path) unless File.directory? self.dir_path
     file_path = File.join(self.dir_path, self.file_name)
-    while buffer = tmpfile.read(65536)
-      begin
-        File.open(File.join(file_path), "wb") do |f|
+    begin
+      File.open(file_path, "w+b") do |f|
+        while buffer = self.tmpfile.gets(2048)
           f.write(buffer)
         end
-      rescue Exception, e
-        puts "exception writing the uploaded file to disk: #{e}"
-        self.errors << "lyckades inte spara filen ordentligt?"
-        return false
       end
+    rescue StandardError => e
+      puts "exception writing the uploaded file to disk: #{e}"
+      self.errors << "lyckades inte spara filen ordentligt?"
+      return false
     end
     return user.file_uri(self.file_name)
   end
