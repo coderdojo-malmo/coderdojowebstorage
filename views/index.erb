@@ -1,45 +1,45 @@
 <div class="span6 offset3">
   <div>
     <% unless is_authenticated? %>
-    <div class=hero-unit>
-      <h1> Välkommen!</h1>
-      <p>&nbsp;</p>
-      <p>Du bygger häftiga saker! Lägg upp dem här så att andra får se dem! <a href=/signin>Logga in</a> eller <a href=/signup>registrera ett nytt konto</a> så är du på väg!</p>
-    </div>
-    <p class="muted">
-      Den här webbsidan är gjord för CoderDojo Malmö. Vill din coderdojo också använda detta går det bra att kontakta
-      <a target="_blank" href="https://twitter.com/coderdojomalmo">@coderdojomalmo</a>
-    </p>
-  <% else %>
-    <p class=fortune>Man behöver inte lära sig allt på en gång.</p>
-    <% end %>
-    <% if defined? @files %>
-      <p>Dina filer:</p>
-      <ul>
-        <% @files.each do |file| %>
-          <% type = file_type(file) %>
-          <li>
-            <% if is_editable? type %>
-              <a href=/editor/<%= file %>><%= file %></a>
-            <% else %>
-              <%= file %>
+      <div class=hero-unit>
+        <h1> Välkommen!</h1>
+        <p>&nbsp;</p>
+        <p>Du bygger häftiga saker! Lägg upp dem här så att andra får se dem! <a href=/signin>Logga in</a> eller <a href=/signup>registrera ett nytt konto</a> så är du på väg!</p>
+      </div>
+      <p class="muted">
+        Den här webbsidan är gjord för CoderDojo Malmö. Vill din coderdojo också använda detta går det bra att kontakta
+        <a target="_blank" href="https://twitter.com/coderdojomalmo">@coderdojomalmo</a>
+      </p>
+    <% else %>
+      <p class=fortune>Man behöver inte lära sig allt på en gång.</p>
+      <% if defined? @files %>
+        <p>Dina filer:</p>
+        <ul>
+          <% @files.each do |file| %>
+            <% type = file_type(file) %>
+            <li>
+              <% if is_editable? type %>
+                <a href=/editor/<%= file %>><%= file %></a>
+              <% else %>
+                <%= file %>
+              <% end %>
+              <% if is_viewable? type %>
+                <a href=<%= current_user.file_uri file %>><i class=icon-eye-open></i></a>
+              <% end %>
             <% end %>
-            <% if is_viewable? type %>
-              <a href=<%= current_user.file_uri file %>><i class=icon-eye-open></i></a>
-            <% end %>
-          <% end %>
-        </ul>
-        <a class=btn href="/upload">Ladda upp fil</a>
-        <form id="createfile_form" class="form-inline">
-          <input id="createfile_name" type="text" placeholder="Filnamn">
-          <button type="submit" class="btn">Skapa fil</a>
-        </form>
-        <script>
-          $('#createfile_form').submit(function create_file() {
-            window.location = '/editor/' + $('#createfile_name').val()
-            return false;
-          });
-        </script>
+          </ul>
+          <a class=btn href="/upload">Ladda upp fil</a>
+          <form id="createfile_form" class="form-inline">
+            <input id="createfile_name" type="text" placeholder="Filnamn">
+            <button type="submit" class="btn">Skapa fil</a>
+          </form>
+          <script>
+            $('#createfile_form').submit(function create_file() {
+              window.location = '/editor/' + $('#createfile_name').val()
+              return false;
+            });
+          </script>
+        <% end %>
       <% end %>
     </div>
   </div>
