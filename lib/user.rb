@@ -9,6 +9,7 @@ class User
   property :username,           String, :length => 3..50
   property :encrypted_password, String, :length => 74
   property :auth_level,         Integer, :default => 0
+  property :public,             Integer, :default => 0, :min => 0, :max => 1
   property :created_at,         DateTime
   property :updated_at,         DateTime
 
@@ -20,7 +21,7 @@ class User
                           :message => 'Du måste ange lösenord'
 
 
-  attr_accessible :username, :password
+  attr_accessible :username, :password, :public
   attr_accessor   :password, :custom_errors
 
   attr_reader     :encrypted_password,
@@ -42,6 +43,10 @@ class User
 
   def is_registered?
     (self.id > 0)
+  end
+
+  def is_editable_by?(someuser)
+    (someuser == self || someuser.is_admin?)
   end
 
   def role
@@ -118,7 +123,7 @@ class User
     content
   end
 
-  # authentication with a very simple layer
+  # authentication with a small layer
   # on top of bcrypt
   def self.authenticate_by_password(username, password)
     user = User.first :username => username
@@ -144,6 +149,11 @@ class User
     else
       "unconfirmed"
     end
+  end
+
+  # scopes
+  def self.all_public
+    all :public => 1
   end
 
   private

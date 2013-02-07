@@ -34,8 +34,10 @@ class CoderDojoWebStorage < Sinatra::Base
   get "/" do
     if is_authenticated?
       @files = current_user.files
+      erb :home
+    else
+      erb :index
     end
-    erb :index
   end
 
   ["/om", "/about"].each do |about_url|
@@ -90,20 +92,23 @@ class CoderDojoWebStorage < Sinatra::Base
     redirect "/handleusers"
   end
 
-  # edit a user, changing password etc.
-  # ensure admin if not editing self
-  get "/edit/:username" do
+  post "/setpublicflag/:username" do
     ensure_authenticated!
     @user = User.first :username => params[:username]
-    halt(403) unless @user.is_editable_by current_user
-    erb :edituser
-  end
+    halt(403) unless @user.is_editable_by?(current_user)
+    puts "SHOULD PROBABLY SAVE HERE params: #{params.inspect}"
+    @user.public = params['user']['public']
+    if @user.save
+      flash[:notice] = 'Användaren uppdaterades'
+    else
+      flash[:error] = 'Något gick fel! lyckdes inte spara'
+    end
 
-  post "/edit/:username" do
-    ensure_authenticated!
-    @user = User.first :username => params[:username]
-    halt(403) unless @user.is_editable_by current_user
-    # @todo implement
+    if @user == current_user
+      redirect '/'
+    else
+      redirect '/handleusers'
+    end
   end
 
   get "/show/:username" do
@@ -128,18 +133,19 @@ class CoderDojoWebStorage < Sinatra::Base
   end
 
 
-  get "/users" do
-    ensure_authenticated!
+  get "/users/?" do
+    @users = User.all_public
+    erb :list_users
   end
 
-  get "/users/:username/update" do
-    @user = User.first :username => params[:username]
-  end
+  #get "/users/:username/update" do
+  #  @user = User.first :username => params[:username]
+  #end
 
-  post "/users/:username/update" do
-    @user = User.first :username => params[:username]
-    ensure_admin! unless @user.id.eql?(current_user.id)
-  end
+  #post "/users/:username/update" do
+  #  @user = User.first :username => params[:username]
+  #  ensure_admin! unless @user.id.eql?(current_user.id)
+  #end
 
   get "/users/:username" do
     @user = User.first :username =>  params[:username]

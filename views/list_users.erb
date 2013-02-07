@@ -1,0 +1,5 @@
+<% @users.each do |user| %>
+  <div>
+    <a href="/u/<%= h user.username %>"><%= h user.username %></a>
+  </div>
+<% end %>
