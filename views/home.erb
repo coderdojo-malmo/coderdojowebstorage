@@ -29,7 +29,7 @@
     <a class="btn" href="/upload">Ladda upp fil</a>
     <form id="createfile_form" class="form-inline">
       <input id="createfile_name" type="text" placeholder="Filnamn">
-      <button type="submit" class="btn">Skapa fil</a>
+      <button id="createfile_submit" type="submit" class="btn" disabled="disabled" >Skapa fil</button>
     </form>
     <script>
 
@@ -75,6 +75,16 @@
 
         window.location = '/editor/' + [basename, extension].join(".");
         return false;
+      });
+
+      // The skapa fil button should only be clickable when there is a filename
+      $('#createfile_name').change(function() {
+        var $me = $(this);
+        if ($me.val() != '') {
+          $('#createfile_submit').removeAttr('disabled');
+        } else {
+          $('#createfile_submit').attr('disabled','disabled');
+        }
       });
 
 
