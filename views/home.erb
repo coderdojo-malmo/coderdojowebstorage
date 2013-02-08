@@ -16,12 +16,12 @@
         <% type = file_type(file) %>
         <li>
           <% if is_editable? type %>
-            <a href=/editor/<%= file %>><%= file %></a>
+            <a href=/editor/<%= h file %>><%= h file %></a>
           <% else %>
-            <%= file %>
+            <%= h file %>
           <% end %>
           <% if is_viewable? type %>
-            <a href=<%= current_user.file_uri file %>><i class=icon-eye-open></i></a>
+            <a href=<%= h current_user.file_uri(file) %>><i class=icon-eye-open></i></a>
           <% end %>
         </li>
       <% end %>
@@ -32,11 +32,58 @@
       <button type="submit" class="btn">Skapa fil</a>
     </form>
     <script>
+
+      // Validate the filename before the client is sent to /editor/<filename>
       $('#createfile_form').submit(function create_file() {
-        window.location = '/editor/' + $('#createfile_name').val()
+        // Use an object and check for hasOwnProperty
+        // since it's faster then using an array.
+        var validExtensions = {
+          jpg:1, jpeg:1, JPG:1, gif:1,
+          gif:1, GIF:1,
+          png:1, PNG:1, apng:1, APNG:1,
+          swf:1, SWF:1,
+          html:1, htm:1,
+          txt:1
+        };
+        var basename,
+            extension,
+            extIndex;
+        var filename = String($('#createfile_name').val());
+
+        // Can we find an file extension in the supplied filename?
+        extIndex = filename.lastIndexOf('.');
+        if (extIndex >= 0) {
+          basename = filename.substr(0,extIndex);
+          extension = filename.substr(extIndex+1);
+
+        // When no filename is supplied; default to .html
+        } else {
+          basename = filename;
+          extension = 'html';
+        }
+
+        // Only allow normal ascii chars in the filename
+        if (!filename.match(/^[a-zA-Z\._-]+$/)) {
+          alert('du får endast använda a-zA-Z . _ - i filnamnet');
+          return false;
+        }
+
+        if (!validExtensions.hasOwnProperty(extension)) {
+          alert('Tillåtna filnamn: jpg,gif,png,apng,swf,html,txt');
+          return false;
+        }
+
+        window.location = '/editor/' + [basename, extension].join(".");
         return false;
       });
 
+
+
+      // ---------------------------------------------------------------
+      // Handle the public flag checkbox
+      // Autosubmit the form on change
+      // Set default value / checked from db
+      // ---------------------------------------------------------------
       var $publicCheckbox = $('#public-checkbox');
       var $publicHidden   = $('#public-hidden');
 

@@ -76,6 +76,15 @@ class UserFile
     true
   end
 
+  def self.sanitize_file_name(file_name)
+    file_name.gsub(/^.*(\\|\/)/, '').
+              gsub(/[^0-9A-Za-z.\-]/, '_')
+  end
+
+  def self.valid_file_name?(file_name)
+    (file_name.match(/^[0-9A-Za-z.\-]+$/)) ? true : false
+  end
+
   private
 
   def self.valid_mime_types

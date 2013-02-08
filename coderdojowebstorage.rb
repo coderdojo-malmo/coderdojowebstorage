@@ -155,6 +155,9 @@ class CoderDojoWebStorage < Sinatra::Base
   get "/editor/*" do
     ensure_authenticated!
     @file_name = File.basename(params[:splat][0])
+
+    halt(422) unless UserFile.valid_file_name?(@file_name)
+
     @file_type = file_type(@file_name)
     @file_content = current_user.content_of @file_name
     @user_base_url = "/u/#{current_user.username}/"
@@ -164,6 +167,7 @@ class CoderDojoWebStorage < Sinatra::Base
   post "/editor/*" do
     ensure_authenticated!
     file_name = File.basename(params[:splat][0])
+    file_name = UserFile.sanitize_file_name(file_name)
     if current_user.update_file(file_name, params[:file_content])
       flash[:notice] = 'Filen sparades'
     else
@@ -186,6 +190,10 @@ class CoderDojoWebStorage < Sinatra::Base
 
   error 404 do
     erb :error_404
+  end
+
+  error 422 do
+    erb :error_422
   end
 
 end
