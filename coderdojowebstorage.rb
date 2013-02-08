@@ -111,10 +111,6 @@ class CoderDojoWebStorage < Sinatra::Base
     end
   end
 
-  get "/show/:username" do
-    @user = User.first :username =>  params[:username]
-    erb :show_user
-  end
 
   get "/upload" do
     ensure_authenticated!
@@ -129,7 +125,6 @@ class CoderDojoWebStorage < Sinatra::Base
       @errors = current_user.custom_errors
       erb :upload
     end
-
   end
 
 
@@ -138,19 +133,18 @@ class CoderDojoWebStorage < Sinatra::Base
     erb :list_users
   end
 
-  #get "/users/:username/update" do
-  #  @user = User.first :username => params[:username]
-  #end
-
-  #post "/users/:username/update" do
-  #  @user = User.first :username => params[:username]
-  #  ensure_admin! unless @user.id.eql?(current_user.id)
-  #end
-
   get "/users/:username" do
     @user = User.first :username =>  params[:username]
     erb :show_user
   end
+
+  # deprecated?
+  get "/show/:username" do
+    puts "show/:username is DEPRECATED"
+    @user = User.first :username =>  params[:username]
+    erb :show_user
+  end
+
 
   get "/editor/*" do
     ensure_authenticated!
