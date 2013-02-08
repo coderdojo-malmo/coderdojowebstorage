@@ -1,5 +1,5 @@
 <div class="span6 offset3">
-  <p class=fortune>Man behöver inte lära sig allt på en gång.</p>
+  <p class="fortune">Man behöver inte lära sig allt på en gång.</p>
 
   <form id="public-form" action="/setpublicflag/<%= h current_user.username %>" method="post">
     <label class="checkbox">
@@ -16,17 +16,17 @@
         <% type = file_type(file) %>
         <li>
           <% if is_editable? type %>
-            <a href=/editor/<%= h file %>><%= h file %></a>
+            <a href="/editor/<%= h file %>"><%= h file %></a>
           <% else %>
             <%= h file %>
           <% end %>
           <% if is_viewable? type %>
-            <a href=<%= h current_user.file_uri(file) %>><i class=icon-eye-open></i></a>
+            <a href="<%= h current_user.file_uri(file) %>"><i class=icon-eye-open></i></a>
           <% end %>
         </li>
       <% end %>
     </ul>
-    <a class=btn href="/upload">Ladda upp fil</a>
+    <a class="btn" href="/upload">Ladda upp fil</a>
     <form id="createfile_form" class="form-inline">
       <input id="createfile_name" type="text" placeholder="Filnamn">
       <button type="submit" class="btn">Skapa fil</a>
