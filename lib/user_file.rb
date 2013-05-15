@@ -90,14 +90,14 @@ class UserFile
   def self.valid_mime_types
     [
       "text/plain", "text/html", "text/xml", "text/xhtml", "text/json",
-      "image/jpeg", "image/png", "image/gif"
+      "image/jpeg", "image/png", "image/gif", "text/css",
     ]
   end
 
   def self.valid_file_ends
     [
       ".txt", ".html", ".xml", ".json",
-      ".jpg", ".jpeg", ".png", ".gif"
+      ".jpg", ".jpeg", ".png", ".gif", ".css"
     ]
   end
 
