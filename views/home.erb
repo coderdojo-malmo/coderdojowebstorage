@@ -5,8 +5,12 @@
     <label class="checkbox">
       <input id="public-checkbox" type="checkbox" name="waste" value="1">
       <input id="public-hidden" type="hidden" name="user[public]" value="1">
-      Publicera min hemsida i <a href="/users/"> Listan </a>
+      Publicera hemsidan?
     </label>
+    <p>
+      Att publicera hemsidan innebär att du är med i <a href="/users/"> Listan</a>
+      över alla deltagare som har en egen hemsida.
+    </p>
   </form>
 
   <% if defined? @files %>
@@ -70,7 +74,11 @@
         }
 
         if (!validExtensions.hasOwnProperty(extension)) {
-          alert('Tillåtna filnamn: jpg,gif,png,apng,swf,html,txt');
+          var validformats = [];
+          for (fileend in validExtensions) {
+            validformats.push(fileend);
+          }
+          alert('Tillåtna filnamn: '+validformats.join(", "));
           return false;
         }
 
@@ -79,9 +87,9 @@
       });
 
       // The skapa fil button should only be clickable when there is a filename
-      $('#createfile_name').change(function() {
+      $('#createfile_name').keyup(function() {
         var $me = $(this);
-        if ($me.val() != '') {
+        if ($me.val().length > 4) {
           $('#createfile_submit').removeAttr('disabled');
         } else {
           $('#createfile_submit').attr('disabled','disabled');

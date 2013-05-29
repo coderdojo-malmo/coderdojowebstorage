@@ -96,8 +96,7 @@ class CoderDojoWebStorage < Sinatra::Base
     ensure_authenticated!
     @user = User.first :username => params[:username]
     halt(403) unless @user.is_editable_by?(current_user)
-    puts "SHOULD PROBABLY SAVE HERE params: #{params.inspect}"
-    @user.public = params['user']['public']
+    @user.public = params['user']['public'].to_i
     if @user.save
       flash[:notice] = 'Användaren uppdaterades'
     else
