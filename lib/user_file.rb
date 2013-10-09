@@ -82,7 +82,7 @@ class UserFile
   end
 
   def self.valid_file_name?(file_name)
-    (file_name.match(/^[0-9A-Za-z.\-]+$/)) ? true : false
+    (file_name.match(/^[0-9A-Za-z_.\-]+$/)) ? true : false
   end
 
   private
