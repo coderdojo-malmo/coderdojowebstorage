@@ -68,7 +68,7 @@
         }
 
         // Only allow normal ascii chars in the filename
-        if (!filename.match(/^[a-zA-Z\._-]+$/)) {
+        if (!filename.match(/^[0-9a-zA-Z\._-]+$/)) {
           alert('du får endast använda a-zA-Z . _ - i filnamnet');
           return false;
         }
