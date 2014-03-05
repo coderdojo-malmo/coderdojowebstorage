@@ -1,5 +1,8 @@
 <button class="btn" id="save">Spara</button>
 <a class="btn" id="open" href="<%= current_user.file_uri @file_name %>" target="_blank">Öppna i nytt fönster</a>
+<% if File.extname(@file_name).eql?(".html") %>
+  <a class="btn" target="_blank" href="http://validator.w3.org/check?uri=<%= Rack::Utils::escape(@full_public_uri) %>&charset=%28detect+automatically%29&doctype=Inline&group=0">Validera din html</a><small>Bra hjälp om saker inte fungerar</small>
+<% end %>
 <form id="upload_form" action="" method="post">
   <textarea id="upload_file_content" name="file_content" style="display: none;"></textarea>
 </form>

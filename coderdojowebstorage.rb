@@ -154,6 +154,10 @@ class CoderDojoWebStorage < Sinatra::Base
     @file_type = file_type(@file_name)
     @file_content = current_user.content_of @file_name
     @user_base_url = "/u/#{current_user.username}/"
+    @full_public_uri = "http://#{request.host}#{current_user.file_uri(@file_name)}"
+    if @file_name == "index.html"
+      @full_public_uri += "index.html"
+    end
     erb :editor
   end
 
