@@ -85,11 +85,11 @@ class UserFile
   private
 
   def self.valid_mime_types
-    %w(text/plain text/html text/xml text/xhtml text/json text/javascript image/jpeg image/png image/gif text/css)
+    %w(text/plain text/html text/xml text/xhtml text/json text/javascript image/jpeg image/png image/gif text/css audio/mpeg)
   end
 
   def self.valid_file_ends
-    %w(.txt .html .xml .json .jpg .jpeg .png .gif .css .js)
+    %w(.txt .html .xml .json .jpg .jpeg .png .gif .css .js .mp3)
   end
 
   def get_mime_type
