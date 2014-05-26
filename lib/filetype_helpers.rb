@@ -7,6 +7,7 @@ module Sinatra
       when '.js' then :js
       when '.png', '.gif', '.jpg', '.jpeg' then :image
       when '.txt' then :txt
+      when '.mp3' then :mp3
       else :unknown
       end
     end
@@ -14,7 +15,7 @@ module Sinatra
       [:html, :css, :js, :txt].include? file_type
     end
     def is_viewable?(file_type)
-      [:html, :image, :txt].include? file_type
+      [:html, :image, :txt, :mp3].include? file_type
     end
   end
 
