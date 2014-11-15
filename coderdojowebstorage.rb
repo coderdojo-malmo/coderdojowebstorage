@@ -20,7 +20,7 @@ class CoderDojoWebStorage < Sinatra::Base
   set    :session_secret, CFG['session_secret']
   PWSALT = CFG['pwsalt']
 
-  enable :sessions
+  use Rack::Session::Cookie, :key => 'rack.session', :path => '/', :secret => session_secret
   use Rack::Flash
 
   # use authentication
