@@ -18,6 +18,8 @@ gem 'ruby-filemagic'
 gem 'foreman'
 gem 'unicorn'
 
+gem 'rack_csrf'
+
 group :development do
   gem 'dm-sqlite-adapter'
 end

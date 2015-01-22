@@ -4,6 +4,7 @@ require 'sinatra/base'
 require 'rack-flash'
 require 'data_mapper'
 require 'rack-flash'
+require 'rack/csrf'
 require File.dirname(__FILE__)+'/lib/user'
 require File.dirname(__FILE__)+'/lib/user_file'
 require File.dirname(__FILE__) + '/lib/authenticator'
@@ -22,6 +23,7 @@ class CoderDojoWebStorage < Sinatra::Base
 
   use Rack::Session::Cookie, :key => 'rack.session', :path => '/', :secret => session_secret
   use Rack::Flash
+  use Rack::Csrf, :check_only => ['POST:/signin']
 
   # use authentication
   register Sinatra::Authenticator
