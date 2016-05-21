@@ -32,8 +32,13 @@ module Sinatra
       end
 
       app.post "/signin" do
-        warden.authenticate!(:password)
-        flash[:notice] = "Du är nu inloggad!"
+        bfp = BruteForceProtection.new(request, User.first(username: params[:username]))
+        if bfp.deny_request?
+          flash[:notice] = "Du har forsokt logga in for monga ganger med fel losenord."
+        else
+          warden.authenticate!(:password)
+          flash[:notice] = "Du är nu inloggad!"
+        end
         redirect "/"
       end
 

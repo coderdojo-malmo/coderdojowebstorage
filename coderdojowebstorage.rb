@@ -7,6 +7,7 @@ require 'rack-flash'
 require 'rack/csrf'
 require File.dirname(__FILE__)+'/lib/user'
 require File.dirname(__FILE__)+'/lib/user_file'
+require File.dirname(__FILE__)+'/lib/brute_force_protection'
 require File.dirname(__FILE__) + '/lib/authenticator'
 require File.dirname(__FILE__)+'/lib/filetype_helpers'
 
